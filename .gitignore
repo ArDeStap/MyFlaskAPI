@@ -10,13 +10,17 @@
 .snapshots/
 #Testing Output folder
 .output/
+
+./__pycache__
+
+
 #Extension App-file
 *.app
 #Rapid Application Development File
 rad.json
 #Translation Base-file
 *.g.xlf
-*.db
+#*.db
 #License-file
 *.flf
 #Test results file
