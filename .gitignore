@@ -20,7 +20,7 @@
 rad.json
 #Translation Base-file
 *.g.xlf
-#*.db
+.db
 #License-file
 *.flf
 #Test results file
