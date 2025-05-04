@@ -43,8 +43,8 @@ def create_user(kwargs):
     conn.close()
 
 
-# create_usersGroup('Administration Group')
-# create_userRights('Full Rights')
+create_usersGroup('Administration Group')
+create_userRights('Full Rights')
 
 # Замените 'admin' и 'your_password' на желаемые имя пользователя и пароль
-# create_user({'username': 'admin', 'password': '123456789', 'third_name': 'Sergeyevich', 'second_name': 'Yukachev', 'first_name': 'Anton', 'rights_id': 1, 'group_id': 1})
+create_user({'username': 'admin', 'password': '123456789', 'third_name': 'Sergeyevich', 'second_name': 'Yukachev', 'first_name': 'Anton', 'rights_id': 1, 'group_id': 1})

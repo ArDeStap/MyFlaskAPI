@@ -1,0 +1,57 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Добро пожаловать в Админ-Панель</h1>
+    </div>
+
+
+
+    {% for table_name, data in json_data.items() %}
+    <div class="table-section mb-5" id="table-{{ table_name }}" style="display: none;">
+
+        <h3>{{ table_name }}</h3>
+
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                {% for j_key, j_value in data.items() %}
+                <button class="nav-link" id="v-pills-{{ j_key }}-tab" data-bs-toggle="pill"
+                    data-bs-target="#v-pills-{{ j_key }}" type="button" role="tab" aria-controls="v-pills-{{ j_key }}"
+                    aria-selected="false">
+
+                    {{ j_key }}
+
+                </button>
+                {% endfor %}
+            </div>
+
+                <div class="tab-content" id="v-pills-tabContent">
+                    {% for j_key, j_value in data.items() %}
+                    <div class="tab-pane fade" id="v-pills-{{ j_key }}" role="tabpanel"
+                        aria-labelledby="v-pills-{{ j_key }}-tab" style="position: absolute; left: 30%;">
+
+                        <form action="update_content" method="post">
+                             {% for column, row in j_value[0].items() %}
+                            
+
+                            <p> {{ column }}: <input type="text" name="{{ row }}" value="{{ row }}"/></p>
+                            
+                            
+                            
+                            {% endfor %} 
+                            
+                            
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>  
+                            <button type="submit" class="btn btn-primary">Добавить запись к {{ table_name }}</button>  
+                        </form>    
+                    </div>
+                    {% endfor %}
+                </div>
+
+            
+
+        </div>
+    </div>
+    {% endfor %}
+
+
+</main>

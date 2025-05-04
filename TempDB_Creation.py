@@ -9,7 +9,7 @@ c = conn.cursor()
 # Создание таблицы Groups
 c.execute('''CREATE TABLE IF NOT EXISTS groups (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL);''')
+                group_name TEXT NOT NULL);''')
 
 # Создание таблицы прав пользователей
 c.execute('''CREATE TABLE IF NOT EXISTS user_rights (
@@ -66,7 +66,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS user_posts (
           post_description TEXT,
           post_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
           creator_id INTEGER,
-          FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE SET DEFAULT )''')
+          FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE SET DEFAULT );''')
 
 
 # Закрытие соединения с базой данных

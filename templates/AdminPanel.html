@@ -36,8 +36,8 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Логотип</a>
         <div class="d-flex align-items-center">
-            <span class="me-3">Привет, Админ</span>
-            <button class="btn btn-outline-secondary" type="button"><a href="{{ url_for('logout') }}">Выход</a></button>
+            <span class="me-3">Привет, {{ username }}</span>
+            <button class="btn btn-outline-primary" type="button" onclick=logout()>Выход</button>
         </div>
     </div>
 </nav>
@@ -48,13 +48,24 @@
         <!-- Sidebar Menu -->
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
-                            <span data-feather="home"></span>
-                            Редактор
-                        </a>
-                    </li>
+                <ul class="nav flex-column" id="table-nav">
+                    {% if json_data %}
+                        {% for j_key, j_value in json_data.items() %}
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="#{{j_key}}" data-target="table-{{ j_key }}"> 
+                                    <span data-feather="table-{{ j_key }}"></span>
+                                    {{ j_key }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <span data-feather="home"></span>
+                                Редактор
+                            </a>
+                        </li>
+                    {% endif %}
                     <!-- More menu items -->
                 </ul>
             </div>
@@ -62,7 +73,7 @@
 
         <!-- Main Content -->
         {% if json_data %}
-            {% include 'Editlines.html' %}
+            {% include 'Test_Tables.html' %}
         {% else %}
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -81,7 +92,47 @@
     </div>
 </div>
 
+
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll(".nav-link");
+        const tables = document.querySelectorAll(".table-section");
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault(); // предотвращаем переход по ссылке
+
+                // Скрыть все таблицы
+                tables.forEach(t => t.style.display = "none");
+
+                // Убрать active у всех ссылок
+                navLinks.forEach(l => l.classList.remove("active"));
+
+                // Показать нужную таблицу
+                const targetId = this.getAttribute("data-target");
+                const targetTable = document.getElementById(targetId);
+                if (targetTable) {
+                    targetTable.style.display = "block";
+                }
+
+                // Добавить active к текущей ссылке
+                this.classList.add("active");
+            });
+        });
+
+        // Опционально: показать первую таблицу по умолчанию
+        if (navLinks.length > 0) {
+            navLinks[0].click();
+        }
+    });
+</script>
+<script>
+    function logout(){
+        window.location.href = "/logout";//{{ url_for('logout') }}
+    }
+</script>
 </body>
 </html>
