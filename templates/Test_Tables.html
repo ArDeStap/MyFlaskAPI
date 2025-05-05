@@ -24,30 +24,60 @@
                 {% endfor %}
             </div>
 
-                <div class="tab-content" id="v-pills-tabContent">
-                    {% for j_key, j_value in data.items() %}
-                    <div class="tab-pane fade" id="v-pills-{{ j_key }}" role="tabpanel"
-                        aria-labelledby="v-pills-{{ j_key }}-tab" style="position: absolute; left: 30%;">
+            <div class="tab-content" id="v-pills-tabContent">
+                {% for j_key, j_value in data.items() %}
+                <div class="tab-pane fade" id="v-pills-{{ j_key }}" role="tabpanel"
+                    aria-labelledby="v-pills-{{ j_key }}-tab" style="position: absolute; left: 30%;">
+                    <script> console.log("{{j_value[0]}}") </script> 
+                    <form action="update_content" method="post">
+                        
+                        {% for column, row in j_value[0].items() %}
 
-                        <form action="update_content" method="post">
-                             {% for column, row in j_value[0].items() %}
-                            
 
-                            <p> {{ column }}: <input type="text" name="{{ row }}" value="{{ row }}"/></p>
-                            
-                            
-                            
-                            {% endfor %} 
-                            
-                            
-                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>  
-                            <button type="submit" class="btn btn-primary">Добавить запись к {{ table_name }}</button>  
-                        </form>    
-                    </div>
-                    {% endfor %}
+                        <p id="paragraph-{{column}}">  <!--<input type="hidden" name="{{ column }}" value="{{ row }}" /> --></p>
+
+                        <script>
+                            function getInputType(x = "{{ column }}", y = "{{row}}") {
+                                let inputType;
+                                if (x !== "id" && x !== "password") {
+                                    if (y >= '0' && y <= '9') {
+                                        inputType = "number";
+                                    } else if (y instanceof Date) {
+                                        inputType = "datetime-local";
+                                    } else {
+                                        inputType = "text";
+                                    }
+                                } else {
+                                    inputType = "hidden";
+                                    return 0
+                                }
+                                
+                                const inputElement = document.createElement("input");
+                                inputElement.type = inputType;
+                                inputElement.name = x;
+                                inputElement.value  = y;
+                                
+                                let formEl = document.getElementById("paragraph-" + x);
+                                formEl.append(x +":  ")
+                                formEl.append(inputElement)
+
+                                // console.log(inputElement.outerHTML)
+                                //document.body.append(inputElement)
+                            }
+                            getInputType()
+                        </script>
+
+                        {% endfor %}
+                        
+
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        <button type="submit" class="btn btn-primary">Добавить запись к {{ table_name }}</button>
+                    </form>
                 </div>
+                {% endfor %}
+            </div>
 
-            
+
 
         </div>
     </div>
@@ -55,3 +85,4 @@
 
 
 </main>
+
