@@ -4,13 +4,16 @@
         <h1 class="h2">Добро пожаловать в Админ-Панель</h1>
     </div>
 
-
-
     {% for table_name, data in json_data.items() %}
     <div class="table-section mb-5" id="table-{{ table_name }}" style="display: none;">
-
+        <div class="right-direction">
         <h3>{{ table_name }}</h3>
+        
+        {% include 'popup_add_overlay.html' %}
+        <button id="popup-open-{{ table_name }}" class="button-add" style="justify-content: flex-end;" type="submit" onclick="togglePopup(this)" popupOverlay="{{ table_name }}" ><i class="fas fa-plus"></i></button> 
 
+        </div>
+        <script>console.log('{{ data }}')</script>
         <div class="d-flex align-items-start">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 {% for j_key, j_value in data.items() %}
@@ -21,6 +24,7 @@
                     {{ j_key }}
 
                 </button>
+                
                 {% endfor %}
             </div>
 
@@ -34,44 +38,43 @@
                         {% for column, row in j_value[0].items() %}
 
 
-                        <p id="paragraph-{{column}}">  <!--<input type="hidden" name="{{ column }}" value="{{ row }}" /> --></p>
-
-                        <script>
-                            function getInputType(x = "{{ column }}", y = "{{row}}") {
-                                let inputType;
-                                if (x !== "id" && x !== "password") {
-                                    if (y >= '0' && y <= '9') {
-                                        inputType = "number";
-                                    } else if (y instanceof Date) {
-                                        inputType = "datetime-local";
-                                    } else {
-                                        inputType = "text";
-                                    }
+                        <p id="paragraph-{{column}}">  <input type="hidden" name="table_name" value="{{ table_name }}" /> </p>
+                        
+                        <script type = "text/javascript"> 
+                        function getInputType(x = "{{ column }}", y = "{{row}}") {
+                            let inputType;
+                            if (x !== "id" && x !== "password") {
+                                if (y >= '0' && y <= '9') {
+                                    inputType = "number";
+                                } else if (y instanceof Date) {
+                                    inputType = "datetime-local";
                                 } else {
-                                    inputType = "hidden";
-                                    return 0
+                                    inputType = "text";
                                 }
-                                
-                                const inputElement = document.createElement("input");
-                                inputElement.type = inputType;
-                                inputElement.name = x;
-                                inputElement.value  = y;
-                                
-                                let formEl = document.getElementById("paragraph-" + x);
-                                formEl.append(x +":  ")
-                                formEl.append(inputElement)
-
-                                // console.log(inputElement.outerHTML)
-                                //document.body.append(inputElement)
+                            } else {
+                                inputType = "hidden";
+                                return 0
                             }
-                            getInputType()
-                        </script>
+                            
+                            const inputElement = document.createElement("input");
+                            inputElement.type = inputType;
+                            inputElement.name = x;
+                            inputElement.value  = y;
+                            
+                            let formEl = document.getElementById("paragraph-" + x);
+                            formEl.append(x +":  ")
+                            formEl.append(inputElement)
+                        
+                            // console.log(inputElement.outerHTML)
+                            //document.body.append(inputElement)
+                        }
+                        getInputType() </script>
+                        
 
                         {% endfor %}
                         
 
                         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-                        <button type="submit" class="btn btn-primary">Добавить запись к {{ table_name }}</button>
                     </form>
                 </div>
                 {% endfor %}

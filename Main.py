@@ -30,6 +30,10 @@ def home():
 # страница формы логина в админ панель  
 @app.route('/adm_login', methods=['GET', 'POST'])
 def admin_login():
+
+  if 'user_id' in session:
+    return redirect(url_for('admin_panel'))
+
   error = None # обнуляем переменную ошибок 
   if request.method == 'POST':
     username = request.form['username'] # обрабатываем запрос с нашей формы который имеет атрибут name="username"
@@ -57,6 +61,7 @@ def admin_login():
     error = 'Неправильное имя пользователя или пароль'
 
   return render_template('AuthorizationPage.html', error=error)
+
 
 @app.route('/update_content', methods=['POST'])
 def update_content():
@@ -141,7 +146,7 @@ def admin_panel():
       })
 
     tables_data[DB_Views.getView(table)] = json_data
-    print(tables_data)
+    
   conn.close()
 
   # conn = get_db_connection()
