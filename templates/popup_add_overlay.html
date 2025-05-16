@@ -4,21 +4,23 @@
         <div class="popup-box">
             <h2 style="color: green;">{{ table_name }} Form</h2>
             <form action="add_content" class="form-container">
+              {% for column in data['columns'] %}
+
                 <label class="form-label" 
-                       for="name">
-                  Username:
+                       for="{{column}}">
+                       {{column}}:
                   </label>
                 <input class="form-input" type="text" 
-                       placeholder="Enter Your Username" 
-                       id="name" name="name" required>
+                       placeholder="Введите {{column}}" 
+                       id="{{ table_name }}-{{column}}" name="{{column}}" required>
 
-                <label class="form-label" for="email">Email:</label>
+                <!-- <label class="form-label" for="email">Email:</label>
                 <input class="form-input"
                        type="email" 
                        placeholder="Enter Your Email"
                        id="email" 
-                       name="email" required>
-
+                       name="email" required> -->
+              {% endfor %}
                 <button class="btn-submit" 
                         type="submit">
                   Submit

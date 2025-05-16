@@ -21,6 +21,30 @@ def get_db_connection():
   conn.row_factory = sqlite3.Row
   return conn
 
+@app.route('/getUser', methods=['GET'])
+def getUser():
+  print(request)
+  username = request.form['username'] # обрабатываем запрос с нашей формы который имеет атрибут name="username"
+  password = request.form['password'] # обрабатываем запрос с нашей формы который имеет атрибут name="password"
+  hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest() # шифруем пароль в sha-256
+
+    # устанавливаем соединение с БД
+  conn = get_db_connection() 
+    # создаем запрос для поиска пользователя по username,
+    # если такой пользователь существует, то получаем все данные id, password
+  user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+    # закрываем подключение БД
+  conn.close() 
+            
+    # теперь проверяем если данные сходятся формы с данными БД
+  if user and user['password'] == hashed_password:
+      # в случае успеха создаем сессию в которую записываем id пользователя
+    print("Hello, ", user['second_Name'], user['first_Name'])
+
+    return f"Hello, {user['second_Name']} {user['first_Name']}"
+  else:
+    return "invalid username or password"
+
 #  наша корневая страиницу лендинда 
 @app.route('/')
 def home():
@@ -145,7 +169,8 @@ def admin_panel():
     #           'password': raw['password']
       })
 
-    tables_data[DB_Views.getView(table)] = json_data
+    
+    tables_data[DB_Views.getView(table)] = {'data': json_data, 'columns': columns}
     
   conn.close()
 
